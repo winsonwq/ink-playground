@@ -4,9 +4,8 @@
  * 覆盖 Ink 所有核心 API：组件、Hooks、布局、交互
  * 
  * 运行: npx tsx src/index.tsx
- * 或: npx ts-node src/index.tsx
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import { 
   render, 
   Text, 
@@ -26,35 +25,50 @@ import {
   useBoxMetrics,
   useAnimation,
   usePaste,
-  InkElement,
-  FC,
 } from 'ink';
+
+// ============================================================
+// 代码说明组件
+// ============================================================
+const CodeBlock: FC<{ code: string }> = ({ code }) => (
+  <Box flexDirection="column" marginTop={1}>
+    <Text dimColor>代码:</Text>
+    <Box 
+      backgroundColor="black" 
+      padding={1} 
+      marginTop={1}
+      borderStyle="round"
+      borderColor="gray"
+    >
+      {code.split('\n').map((line, i) => (
+        <Text key={i} dimColor>{line}{i < code.split('\n').length - 1 ? '\n' : ''}</Text>
+      ))}
+    </Box>
+  </Box>
+);
 
 // ============================================================
 // 演示1: Text 组件 - 颜色和样式
 // ============================================================
 const TextStylesDemo: FC = () => (
   <Box flexDirection="column" marginY={1}>
-    <Box gap={2}>
-      <Text bold color="cyan">1. Text 样式演示</Text>
+    <Text bold color="cyan">1. Text 组件 - 颜色和样式</Text>
+    <Text dimColor marginTop={1}>Text 是 Ink 最基本的组件，用于显示文字。支持的样式属性：</Text>
+    
+    <Box flexDirection="column" marginTop={1} gap={1}>
+      <Box gap={2}><Text color="red">■</Text><Text>color="red" - 文字颜色</Text></Box>
+      <Box gap={2}><Text backgroundColor="blue" color="white">■</Text><Text>backgroundColor - 背景色</Text></Box>
+      <Box gap={2}><Text bold>■</Text><Text>bold - 粗体</Text></Box>
+      <Box gap={2}><Text italic>■</Text><Text>italic - 斜体</Text></Box>
+      <Box gap={2}><Text underline>■</Text><Text>underline - 下划线</Text></Box>
+      <Box gap={2}><Text strikethrough>■</Text><Text>strikethrough - 删除线</Text></Box>
+      <Box gap={2}><Text inverse>■</Text><Text>inverse - 反色</Text></Box>
+      <Box gap={2}><Text dimColor>■</Text><Text>dimColor - 暗淡</Text></Box>
     </Box>
-    <Box gap={2}>
-      <Text color="red">红色</Text>
-      <Text color="green">绿色</Text>
-      <Text color="blue">蓝色</Text>
-      <Text color="yellow">黄色</Text>
-      <Text color="magenta">品红</Text>
-      <Text color="cyan">青色</Text>
-    </Box>
-    <Box gap={2}>
-      <Text backgroundColor="red" color="white">白底红字</Text>
-      <Text dimColor>暗淡文字</Text>
-      <Text bold>粗体</Text>
-      <Text italic>斜体</Text>
-      <Text underline>下划线</Text>
-      <Text strikethrough>删除线</Text>
-      <Text inverse>反色</Text>
-    </Box>
+    
+    <CodeBlock code={`<Text color="red" bold underline>
+  带样式的文字
+</Text>`} />
   </Box>
 );
 
@@ -63,16 +77,39 @@ const TextStylesDemo: FC = () => (
 // ============================================================
 const TextWrapDemo: FC = () => (
   <Box flexDirection="column" marginY={1}>
-    <Text bold color="cyan">2. Text Wrap 模式 (容器 width=25)</Text>
-    <Box width={25} borderStyle="round" padding={1}>
-      <Text wrap="truncate">Hello World Truncate</Text>
+    <Text bold color="cyan">2. Text wrap - 文本截断模式</Text>
+    <Text dimColor marginTop={1}>当文字超出容器宽度时，wrap 属性决定如何处理：</Text>
+    
+    <Box marginTop={1} gap={1}>
+      <Box gap={2}>
+        <Text bold>truncate:</Text>
+        <Box width={20} borderStyle="round" padding={1}>
+          <Text wrap="truncate">Hello World Truncate</Text>
+        </Box>
+      </Box>
+      <Box gap={2}>
+        <Text bold>truncate-middle:</Text>
+        <Box width={20} borderStyle="round" padding={1}>
+          <Text wrap="truncate-middle">Hello World</Text>
+        </Box>
+      </Box>
+      <Box gap={2}>
+        <Text bold>truncate-start:</Text>
+        <Box width={20} borderStyle="round" padding={1}>
+          <Text wrap="truncate-start">Hello World</Text>
+        </Box>
+      </Box>
+      <Box gap={2}>
+        <Text bold>wrap (默认):</Text>
+        <Box width={20} borderStyle="round" padding={1}>
+          <Text wrap="wrap">Hello World</Text>
+        </Box>
+      </Box>
     </Box>
-    <Box width={25} borderStyle="round" padding={1} marginTop={1}>
-      <Text wrap="truncate-middle">Hello World Middle</Text>
-    </Box>
-    <Box width={25} borderStyle="round" padding={1} marginTop={1}>
-      <Text wrap="truncate-start">Hello World Start</Text>
-    </Box>
+    
+    <CodeBlock code={`<Box width={20}>
+  <Text wrap="truncate">Hello World</Text>
+</Box>`} />
   </Box>
 );
 
@@ -81,19 +118,45 @@ const TextWrapDemo: FC = () => (
 // ============================================================
 const BoxLayoutDemo: FC = () => (
   <Box flexDirection="column" marginY={1}>
-    <Text bold color="cyan">3. Box 布局尺寸</Text>
-    <Box gap={2}>
-      <Box width={8} height={3} borderStyle="round" justifyContent="center" alignItems="center">
-        <Text>8x3</Text>
-      </Box>
-      <Box width={12} height={3} borderStyle="single" justifyContent="center" alignItems="center">
-        <Text>12x3</Text>
-      </Box>
-      <Box width={16} height={3} borderStyle="double" justifyContent="center" alignItems="center">
-        <Text>16x3</Text>
+    <Text bold color="cyan">3. Box 组件 - 尺寸与布局</Text>
+    <Text dimColor marginTop={1}>Box 是 Ink 的核心布局组件，类似 CSS 的 flex 容器。</Text>
+    
+    <Box marginTop={1} gap={1}>
+      <Text bold>width / height:</Text>
+      <Box gap={2} flexDirection="row">
+        <Box width={10} height={3} borderStyle="round" justifyContent="center" alignItems="center">
+          <Text>10x3</Text>
+        </Box>
+        <Box width={15} height={3} borderStyle="single" justifyContent="center" alignItems="center">
+          <Text>15x3</Text>
+        </Box>
+        <Box width={20} height={3} borderStyle="double" justifyContent="center" alignItems="center">
+          <Text>20x3</Text>
+        </Box>
       </Box>
     </Box>
-    <Text dimColor marginTop={1}>padding / margin / gap</Text>
+    
+    <Box marginTop={1} gap={1}>
+      <Text bold>padding / margin / gap:</Text>
+      <Box borderStyle="round" padding={2} margin={1} gap={1}>
+        <Text>内边距 padding=2</Text>
+        <Text>外边距 margin=1</Text>
+        <Text>元素间距 gap=1</Text>
+      </Box>
+    </Box>
+    
+    <CodeBlock code={`<Box 
+  width={20} 
+  height={5}
+  padding={2}
+  margin={1}
+  gap={2}
+  borderStyle="round"
+  justifyContent="center"
+  alignItems="center"
+>
+  <Text>内容</Text>
+</Box>`} />
   </Box>
 );
 
@@ -102,21 +165,39 @@ const BoxLayoutDemo: FC = () => (
 // ============================================================
 const FlexLayoutDemo: FC = () => (
   <Box flexDirection="column" marginY={1}>
-    <Text bold color="cyan">4. Flex 布局</Text>
-    <Box gap={2}>
-      <Box width={20} gap={1}>
-        <Text bold color="yellow">justifyContent:</Text>
-        <Box borderStyle="round" padding={1}>
-          <Text dimColor>flex-start|center|flex-end</Text>
+    <Text bold color="cyan">4. Flexbox 布局</Text>
+    <Text dimColor marginTop={1}>justifyContent 和 alignItems 控制主轴和交叉轴对齐：</Text>
+    
+    <Box marginTop={1} gap={2}>
+      <Box gap={1}>
+        <Text bold color="yellow">justifyContent (水平对齐):</Text>
+        <Box borderStyle="round" padding={1} gap={1}>
+          <Text dimColor>flex-start | center | flex-end</Text>
+          <Text dimColor>space-between | space-around</Text>
         </Box>
       </Box>
-      <Box width={20} gap={1}>
-        <Text bold color="yellow">alignItems:</Text>
-        <Box borderStyle="round" padding={1} height={3} alignItems="center">
-          <Text dimColor>flex-start|center|flex-end</Text>
+      <Box gap={1}>
+        <Text bold color="yellow">alignItems (垂直对齐):</Text>
+        <Box borderStyle="round" padding={1} height={5} gap={1} alignItems="center">
+          <Text>center</Text>
+          <Text dimColor>flex-start | flex-end | stretch</Text>
         </Box>
       </Box>
     </Box>
+    
+    <CodeBlock code={`// 水平居中，垂直居中
+<Box 
+  justifyContent="center" 
+  alignItems="center"
+>
+  <Text>居中内容</Text>
+</Box>
+
+// 两端对齐
+<Box justifyContent="space-between">
+  <Text>左</Text>
+  <Text>右</Text>
+</Box>`} />
   </Box>
 );
 
@@ -125,35 +206,20 @@ const FlexLayoutDemo: FC = () => (
 // ============================================================
 const BorderStylesDemo: FC = () => (
   <Box flexDirection="column" marginY={1}>
-    <Text bold color="cyan">5. 边框样式</Text>
-    <Box gap={2} flexDirection="row">
-      <Box width={12} height={3} borderStyle="single" justifyContent="center" alignItems="center">
-        <Text>single</Text>
-      </Box>
-      <Box width={12} height={3} borderStyle="double" justifyContent="center" alignItems="center">
-        <Text>double</Text>
-      </Box>
-      <Box width={12} height={3} borderStyle="round" justifyContent="center" alignItems="center">
-        <Text>round</Text>
-      </Box>
-      <Box width={12} height={3} borderStyle="bold" justifyContent="center" alignItems="center">
-        <Text>bold</Text>
-      </Box>
+    <Text bold color="cyan">5. Box 边框样式</Text>
+    <Text dimColor marginTop={1}>borderStyle 属性支持 8 种样式：</Text>
+    
+    <Box marginTop={1} gap={2} flexDirection="row" flexWrap="wrap">
+      {['single', 'double', 'round', 'bold', 'singleDouble', 'doubleSingle', 'classic', 'dots'].map(style => (
+        <Box key={style} width={15} height={3} borderStyle={style as any} justifyContent="center" alignItems="center">
+          <Text>{style}</Text>
+        </Box>
+      ))}
     </Box>
-    <Box gap={2} flexDirection="row" marginTop={1}>
-      <Box width={14} height={3} borderStyle="singleDouble" justifyContent="center" alignItems="center">
-        <Text>s-d</Text>
-      </Box>
-      <Box width={14} height={3} borderStyle="doubleSingle" justifyContent="center" alignItems="center">
-        <Text>d-s</Text>
-      </Box>
-      <Box width={14} height={3} borderStyle="classic" justifyContent="center" alignItems="center">
-        <Text>classic</Text>
-      </Box>
-      <Box width={14} height={3} borderStyle="dots" justifyContent="center" alignItems="center">
-        <Text>dots</Text>
-      </Box>
-    </Box>
+    
+    <CodeBlock code={`<Box borderStyle="round">圆角边框</Box>
+<Box borderStyle="double">双线边框</Box>
+<Box borderStyle="bold">粗边框</Box>`} />
   </Box>
 );
 
@@ -163,19 +229,36 @@ const BorderStylesDemo: FC = () => (
 const SpacerNewlineDemo: FC = () => (
   <Box flexDirection="column" marginY={1}>
     <Text bold color="cyan">6. Spacer 和 Newline</Text>
-    <Box flexDirection="row">
-      <Box width={10} borderStyle="round" justifyContent="center" alignItems="center">
-        <Text>左边</Text>
+    <Text dimColor marginTop={1}>Spacer 占据flex剩余空间，Newline 换行：</Text>
+    
+    <Box marginTop={1}>
+      <Box flexDirection="row">
+        <Box width={8} borderStyle="round" justifyContent="center" alignItems="center">
+          <Text>左边</Text>
+        </Box>
+        <Spacer />
+        <Box width={8} borderStyle="round" justifyContent="center" alignItems="center">
+          <Text>右边</Text>
+        </Box>
       </Box>
-      <Spacer />
-      <Box width={10} borderStyle="round" justifyContent="center" alignItems="center">
-        <Text>右边</Text>
-      </Box>
+      <Text dimColor marginTop={1}>← Spacer 自动填充中间空间 →</Text>
     </Box>
+    
     <Newline count={2} />
+    
     <Box borderStyle="round" padding={1}>
       <Text>换行后</Text>
     </Box>
+    
+    <CodeBlock code={`// Spacer 填充中间空间
+<Box flexDirection="row">
+  <Text>左</Text>
+  <Spacer />
+  <Text>右</Text>
+</Box>
+
+// Newline 换行
+<Newline count={2} />`} />
   </Box>
 );
 
@@ -187,7 +270,7 @@ const UseInputDemo: FC = () => {
   
   useInput((input, keyInfo) => {
     const parts: string[] = [];
-    if (input) parts.push(`字符: "${input}"`);
+    if (input) parts.push(`"${input}"`);
     if (keyInfo.upArrow) parts.push('↑');
     if (keyInfo.downArrow) parts.push('↓');
     if (keyInfo.leftArrow) parts.push('←');
@@ -197,20 +280,23 @@ const UseInputDemo: FC = () => {
     if (keyInfo.backspace) parts.push('Backspace');
     if (keyInfo.tab) parts.push('Tab');
     if (keyInfo.ctrl) parts.push('Ctrl');
-    if (keyInfo.shift) parts.push('Shift');
-    if (keyInfo.alt) parts.push('Alt');
-    if (parts.length > 0) {
-      setKey(parts.join(' | '));
-    }
+    if (parts.length > 0) setKey(parts.join(' + '));
   });
   
   return (
     <Box flexDirection="column" marginY={1}>
-      <Text bold color="cyan">7. useInput 键盘监听</Text>
-      <Box borderStyle="round" padding={1} minWidth={40}>
+      <Text bold color="cyan">7. useInput - 键盘监听</Text>
+      <Text dimColor marginTop={1}>监听用户按键事件，按下任意键试试：</Text>
+      <Box marginTop={1} borderStyle="round" padding={1}>
         <Text color="cyan">按键: </Text>
-        <Text color="yellow">{key}</Text>
+        <Text color="yellow" bold>{key}</Text>
       </Box>
+      
+      <CodeBlock code={`useInput((input, key) => {
+  if (input === 'q') process.exit(0);
+  if (key.upArrow) console.log('上');
+  if (key.return) console.log('回车');
+});`} />
     </Box>
   );
 };
@@ -222,19 +308,25 @@ const UsePasteDemo: FC = () => {
   const [pasted, setPasted] = useState('');
   
   usePaste((text: string) => {
-    setPasted(text.substring(0, 50) + (text.length > 50 ? '...' : ''));
+    setPasted(text.substring(0, 80));
   });
   
   return (
     <Box flexDirection="column" marginY={1}>
-      <Text bold color="cyan">8. usePaste 粘贴事件</Text>
-      <Text dimColor>在终端中粘贴文本试试</Text>
-      {pasted && (
-        <Box borderStyle="round" padding={1} marginTop={1}>
-          <Text color="green">粘贴: </Text>
+      <Text bold color="cyan">8. usePaste - 粘贴事件</Text>
+      <Text dimColor marginTop={1}>在终端中粘贴文本（Ctrl+Shift+V）：</Text>
+      {pasted ? (
+        <Box marginTop={1} borderStyle="round" padding={1}>
+          <Text color="green">粘贴内容: </Text>
           <Text>{pasted}</Text>
         </Box>
+      ) : (
+        <Text marginTop={1} dimColor>等待粘贴...</Text>
       )}
+      
+      <CodeBlock code={`usePaste((text: string) => {
+  console.log('粘贴了:', text);
+});`} />
     </Box>
   );
 };
@@ -247,14 +339,24 @@ const UseWindowSizeDemo: FC = () => {
   
   return (
     <Box flexDirection="column" marginY={1}>
-      <Text bold color="cyan">9. useWindowSize 响应式</Text>
-      <Box borderStyle="round" padding={1}>
-        <Text>终端尺寸: </Text>
-        <Text color="cyan">{columns}</Text>
+      <Text bold color="cyan">9. useWindowSize - 响应式</Text>
+      <Text dimColor marginTop={1}>获取终端尺寸，实现响应式布局：</Text>
+      <Box marginTop={1} borderStyle="round" padding={1}>
+        <Text>终端: </Text>
+        <Text color="cyan" bold>{columns}</Text>
         <Text> 列 x </Text>
-        <Text color="cyan">{rows}</Text>
+        <Text color="cyan" bold>{rows}</Text>
         <Text> 行</Text>
       </Box>
+      <Text marginTop={1} dimColor>当前宽度 {columns}px，{columns > 80 ? '显示双列布局' : '显示单列布局'}</Text>
+      
+      <CodeBlock code={`const { columns, rows } = useWindowSize();
+
+if (columns > 80) {
+  // 宽屏布局
+} else {
+  // 窄屏布局
+}`} />
     </Box>
   );
 };
@@ -262,19 +364,11 @@ const UseWindowSizeDemo: FC = () => {
 // ============================================================
 // 演示10: useFocus 焦点管理
 // ============================================================
-interface FocusableButtonProps {
-  id: string;
-  label: string;
-  onPress: () => void;
-}
-
-const FocusableButton: FC<FocusableButtonProps> = ({ id, label, onPress }) => {
+const FocusableButton: FC<{ label: string; onPress: () => void }> = ({ label, onPress }) => {
   const { isFocused } = useFocus();
   
   useInput((input, keyInfo) => {
-    if ((keyInfo.return || input === ' ') && isFocused) {
-      onPress();
-    }
+    if ((keyInfo.return || input === ' ') && isFocused) onPress();
   });
   
   return (
@@ -296,32 +390,38 @@ const UseFocusDemo: FC = () => {
   const { focusNext, focusPrevious } = useFocusManager();
   
   useInput((_, keyInfo) => {
-    if (keyInfo.tab && !keyInfo.shift) {
-      focusNext();
-    } else if (keyInfo.tab && keyInfo.shift) {
-      focusPrevious();
-    }
+    if (keyInfo.tab && !keyInfo.shift) focusNext();
+    else if (keyInfo.tab && keyInfo.shift) focusPrevious();
   });
   
-  const buttons = ['选项 A', '选项 B', '选项 C'];
+  const options = ['选项 A', '选项 B', '选项 C'];
   
   return (
     <Box flexDirection="column" marginY={1}>
-      <Text bold color="cyan">10. useFocus 焦点管理</Text>
-      <Text dimColor>Tab 切换焦点，Enter/空格 确认</Text>
-      <Box marginTop={1} gap={1}>
-        {buttons.map((label, i) => (
-          <FocusableButton 
-            key={i} 
-            id={`btn-${i}`}
-            label={label} 
-            onPress={() => setSelected(i)} 
-          />
+      <Text bold color="cyan">10. useFocus - 焦点管理</Text>
+      <Text dimColor marginTop={1}>Tab 切换焦点，Enter 或 空格 确认：</Text>
+      <Box marginTop={1} gap={1} flexDirection="row">
+        {options.map((label, i) => (
+          <FocusableButton key={i} label={label} onPress={() => setSelected(i)} />
         ))}
       </Box>
       {selected !== null && (
-        <Text color="green" marginTop={1}>已选择: {buttons[selected]}</Text>
+        <Text marginTop={1} color="green">✓ 已选择: {options[selected]}</Text>
       )}
+      
+      <CodeBlock code={`const { isFocused } = useFocus();
+
+useInput((input, key) => {
+  if (key.return && isFocused) {
+    // 确认选择
+  }
+});
+
+// Tab 切换
+const { focusNext, focusPrevious } = useFocusManager();
+useInput((_, key) => {
+  if (key.tab) focusNext();
+});`} />
     </Box>
   );
 };
@@ -332,26 +432,33 @@ const UseFocusDemo: FC = () => {
 const UseAnimationDemo: FC = () => {
   const [progress, setProgress] = useState(0);
   const [frame, setFrame] = useState(0);
-  const frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+  const spinnerFrames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
   
   useAnimation((deltaTime: number) => {
     setProgress(p => (p + deltaTime * 0.05) % 100);
-    setFrame(f => (f + 1) % frames.length);
+    setFrame(f => (f + 1) % spinnerFrames.length);
   }, 60);
   
-  const barWidth = 30;
+  const barWidth = 25;
   const filled = Math.round((progress / 100) * barWidth);
   
   return (
     <Box flexDirection="column" marginY={1}>
-      <Text bold color="cyan">11. useAnimation 动画</Text>
-      <Box gap={2}>
-        <Text>{frames[frame]} 加载动画</Text>
-        <Box width={barWidth}>
-          <Text>{'█'.repeat(filled) + '░'.repeat(barWidth - filled)}</Text>
+      <Text bold color="cyan">11. useAnimation - 动画</Text>
+      <Box marginTop={1} gap={2}>
+        <Box gap={1} flexDirection="row" alignItems="center">
+          <Text>{spinnerFrames[frame]}</Text>
+          <Text>加载动画</Text>
         </Box>
-        <Text color="cyan">{Math.round(progress)}%</Text>
+        <Box width={barWidth}>
+          <Text color="cyan">{'█'.repeat(filled)}{'░'.repeat(barWidth - filled)}</Text>
+        </Box>
+        <Text color="yellow">{Math.round(progress)}%</Text>
       </Box>
+      
+      <CodeBlock code={`useAnimation((deltaTime) => {
+  setProgress(p => (p + deltaTime * 0.1) % 100);
+}, 60); // 60 FPS`} />
     </Box>
   );
 };
@@ -364,22 +471,28 @@ const UseAppDemo: FC = () => {
   const [status, setStatus] = useState('idle');
   
   const handleExit = async () => {
-    setStatus('waiting flush...');
+    setStatus('flushing...');
     await waitUntilRenderFlush();
-    setStatus('done! exiting...');
-    setTimeout(() => exit({ message: 'Bye!' }), 500);
+    setStatus('exiting...');
+    setTimeout(() => exit({ message: 'Bye!' }), 300);
   };
   
   return (
     <Box flexDirection="column" marginY={1}>
-      <Text bold color="cyan">12. useApp 生命周期</Text>
-      <Box gap={1}>
-        <Text>状态: </Text>
-        <Text color="green">{status}</Text>
+      <Text bold color="cyan">12. useApp - 应用生命周期</Text>
+      <Text dimColor marginTop={1}>exit() 退出应用，waitUntilRenderFlush() 等待渲染完成：</Text>
+      <Box marginTop={1} gap={1}>
+        <Text>状态: <Text color="green">{status}</Text></Text>
+        <Box borderStyle="round" padding={1} onClick={handleExit}>
+          <Text color="yellow">点击此处演示 exit() → </Text>
+        </Box>
       </Box>
-      <Box borderStyle="round" padding={1} onClick={handleExit}>
-        <Text color="yellow">点击此处演示 exit() → </Text>
-      </Box>
+      
+      <CodeBlock code={`const { exit, waitUntilRenderFlush } = useApp();
+
+// 等待渲染完成后再退出
+await waitUntilRenderFlush();
+exit({ message: 'done' });`} />
     </Box>
   );
 };
@@ -392,16 +505,27 @@ const UseBoxMetricsDemo: FC = () => {
   
   return (
     <Box flexDirection="column" marginY={1}>
-      <Text bold color="cyan">13. useBoxMetrics 元素测量</Text>
-      <Box ref={ref} borderStyle="round" padding={1} width={30}>
+      <Text bold color="cyan">13. useBoxMetrics - 元素测量</Text>
+      <Text dimColor marginTop={1}>测量元素实际渲染尺寸：</Text>
+      <Box ref={ref} marginTop={1} borderStyle="round" padding={1} width={30}>
         <Text>测量这个盒子</Text>
       </Box>
       <Box marginTop={1}>
         <Text>测量结果: </Text>
         <Text color={hasMeasured ? 'green' : 'yellow'}>
-          {hasMeasured ? `${width}x${height}` : '等待测量...'}
+          {hasMeasured ? `${width} x ${height}` : '测量中...'}
         </Text>
       </Box>
+      
+      <CodeBlock code={`const { ref, width, height, hasMeasured } = useBoxMetrics();
+
+<Box ref={ref} width={30}>
+  <Text>内容</Text>
+</Box>
+
+if (hasMeasured) {
+  console.log(\`尺寸: \${width}x\${height}\`);
+}`} />
     </Box>
   );
 };
@@ -419,15 +543,22 @@ const StaticOutputDemo: FC = () => {
   
   return (
     <Box flexDirection="column" marginY={1}>
-      <Text bold color="cyan">14. Static 静态输出</Text>
-      <Box gap={1}>
+      <Text bold color="cyan">14. Static - 静态输出</Text>
+      <Text dimColor marginTop={1}>Static 包裹的内容不参与重新渲染，不会闪烁：</Text>
+      <Box marginTop={1} gap={1}>
         <Static items={[1, 2, 3]}>
-          {(item: number) => (
-            <Text key={item} color="cyan">静态行 {item} (不闪烁)</Text>
-          )}
+          {(item: number) => <Text key={item} color="cyan">静态行 {item}</Text>}
         </Static>
         <Text color="yellow">动态计数: {count} (每秒更新)</Text>
       </Box>
+      
+      <CodeBlock code={`// Static 内容不闪烁
+<Static items={[1, 2, 3]}>
+  {(item) => <Text>静态 {item}</Text>}
+</Static>
+
+// 普通内容会闪烁
+<Text>动态: {count}</Text>`} />
     </Box>
   );
 };
@@ -437,12 +568,22 @@ const StaticOutputDemo: FC = () => {
 // ============================================================
 const TransformDemo: FC = () => (
   <Box flexDirection="column" marginY={1}>
-    <Text bold color="cyan">15. Transform 输出转换</Text>
-    <Transform transform={(outputLine: string) => `>> ${outputLine}`}>
-      <Box borderStyle="round" padding={1}>
-        <Text color="cyan">这行会被 Transform 添加前缀</Text>
-      </Box>
-    </Transform>
+    <Text bold color="cyan">15. Transform - 输出转换</Text>
+    <Text dimColor marginTop={1}>在输出到终端前转换内容：</Text>
+    <Box marginTop={1}>
+      <Transform transform={(line: string) => `→ ${line}`}>
+        <Box borderStyle="round" padding={1}>
+          <Text color="cyan">这行会被添加前缀</Text>
+        </Box>
+      </Transform>
+    </Box>
+    
+    <CodeBlock code={`// 为所有输出添加前缀
+<Transform transform={(line) => \`→ \${line}\`}>
+  <Box>
+    <Text>内容</Text>
+  </Box>
+</Transform>`} />
   </Box>
 );
 
@@ -457,19 +598,24 @@ const UseCursorDemo: FC = () => {
     if (keyInfo.leftArrow) setStep(s => Math.max(0, s - 1));
   });
   
-  const positions = ['①', '②', '③', '④', '⑤'];
+  const steps = ['①', '②', '③', '④', '⑤'];
   
   return (
     <Box flexDirection="column" marginY={1}>
-      <Text bold color="cyan">16. useCursor 光标控制</Text>
-      <Text dimColor>左右箭头移动光标位置</Text>
-      <Box marginTop={1}>
-        {positions.map((pos, i) => (
-          <Text key={i} color={i === step ? 'green' : 'gray'}>
-            {pos}{i < 4 ? ' → ' : ''}
+      <Text bold color="cyan">16. useCursor - 光标控制</Text>
+      <Text dimColor marginTop={1}>左右箭头移动（演示用文字模拟）：</Text>
+      <Box marginTop={1} flexDirection="row">
+        {steps.map((step, i) => (
+          <Text key={i} color={i === step ? 'green' : 'gray'} bold={i === step}>
+            {step}{i < 4 ? ' → ' : ''}
           </Text>
         ))}
       </Box>
+      
+      <CodeBlock code={`const { setCursorPosition } = useCursor();
+
+// 将光标移到指定位置
+setCursorPosition({ left: 5, top: 10 });`} />
     </Box>
   );
 };
@@ -491,18 +637,21 @@ const UseStdinDemo: FC = () => {
   
   return (
     <Box flexDirection="column" marginY={1}>
-      <Text bold color="cyan">17. useStdin Raw 模式</Text>
-      <Box borderStyle="round" padding={1}>
+      <Text bold color="cyan">17. useStdin - Raw 模式</Text>
+      <Text dimColor marginTop={1}>Raw 模式绕过终端缓冲，直接读取按键：</Text>
+      <Box marginTop={1} borderStyle="round" padding={1}>
         <Text>Raw 模式支持: </Text>
-        <Text color={isRawModeSupported ? 'green' : 'red'}>
-          {isRawModeSupported ? '是' : '否'}
-        </Text>
+        <Text color={isRawModeSupported ? 'green' : 'red'}>{isRawModeSupported ? '是' : '否'}</Text>
       </Box>
-      <Box marginTop={1}>
-        <Text>当前模式: </Text>
-        <Text color="cyan">{mode}</Text>
-        <Text dimColor> | 按 R 切换模式</Text>
-      </Box>
+      <Text marginTop={1}>当前: <Text color="cyan">{mode}</Text> | 按 R 切换</Text>
+      
+      <CodeBlock code={`const { isRawModeSupported, setRawMode } = useStdin();
+
+// 启用 Raw 模式
+setRawMode(true);
+
+// Raw 模式下每个字符立即可用
+// 不需要等待回车`} />
     </Box>
   );
 };
@@ -515,14 +664,19 @@ const UseStdoutDemo: FC = () => {
   
   useEffect(() => {
     if (stdout) {
-      stdout.write('[stdout.write] 直接写入标准输出\n');
+      stdout.write('[边缘写入] 这行直接写到 stdout\n');
     }
   }, [stdout]);
   
   return (
     <Box flexDirection="column" marginY={1}>
-      <Text bold color="cyan">18. useStdout 写入</Text>
-      <Text dimColor>stdout.write() 可直接写入标准输出</Text>
+      <Text bold color="cyan">18. useStdout - 直接写入</Text>
+      <Text dimColor marginTop={1}>绕过 Ink 渲染直接写入 stdout：</Text>
+      <Text marginTop={1} dimColor>上面的 "[边缘写入]" 是通过 stdout.write 直接输出的</Text>
+      
+      <CodeBlock code={`const stdout = useStdout();
+
+stdout.write('直接写入 stdout\\n');`} />
     </Box>
   );
 };
@@ -533,29 +687,39 @@ const UseStdoutDemo: FC = () => {
 const ComplexLayoutDemo: FC = () => (
   <Box flexDirection="column" marginY={1}>
     <Text bold color="cyan">19. 复杂布局 - 表格</Text>
-    <Box flexDirection="column" borderStyle="double" padding={1}>
+    <Text dimColor marginTop={1}>用 Box 嵌套实现表格：</Text>
+    
+    <Box marginTop={1} flexDirection="column" borderStyle="double" padding={1}>
       <Box gap={2}>
-        <Box width={15}><Text bold>姓名</Text></Box>
-        <Box width={10}><Text bold>年龄</Text></Box>
-        <Box width={15}><Text bold>城市</Text></Box>
+        <Box width={10}><Text bold>姓名</Text></Box>
+        <Box width={8}><Text bold>年龄</Text></Box>
+        <Box width={12}><Text bold>城市</Text></Box>
       </Box>
-      <Text dimColor>─────────────────────────────────────────────</Text>
-      <Box gap={2}>
-        <Box width={15}><Text color="cyan">张三</Text></Box>
-        <Box width={10}><Text>28</Text></Box>
-        <Box width={15}><Text>北京</Text></Box>
-      </Box>
-      <Box gap={2}>
-        <Box width={15}><Text color="cyan">李四</Text></Box>
-        <Box width={10}><Text>34</Text></Box>
-        <Box width={15}><Text>上海</Text></Box>
-      </Box>
-      <Box gap={2}>
-        <Box width={15}><Text color="cyan">王五</Text></Box>
-        <Box width={10}><Text>25</Text></Box>
-        <Box width={15}><Text>深圳</Text></Box>
-      </Box>
+      <Text dimColor>{'─'.repeat(35)}</Text>
+      {[
+        ['张三', '28', '北京'],
+        ['李四', '34', '上海'],
+        ['王五', '25', '深圳'],
+      ].map(([name, age, city], i) => (
+        <Box key={i} gap={2}>
+          <Box width={10}><Text color="cyan">{name}</Text></Box>
+          <Box width={8}><Text>{age}</Text></Box>
+          <Box width={12}><Text>{city}</Text></Box>
+        </Box>
+      ))}
     </Box>
+    
+    <CodeBlock code={`<Box flexDirection="column" borderStyle="double">
+  <Box gap={2}>
+    <Box width={10}><Text bold>姓名</Text></Box>
+    <Box width={8}><Text bold>年龄</Text></Box>
+  </Box>
+  <Text dimColor>──────────</Text>
+  <Box gap={2}>
+    <Box width={10}><Text>张三</Text></Box>
+    <Box width={8}><Text>28</Text></Box>
+  </Box>
+</Box>`} />
   </Box>
 );
 
@@ -565,30 +729,39 @@ const ComplexLayoutDemo: FC = () => (
 const AccessibilityDemo: FC = () => (
   <Box flexDirection="column" marginY={1}>
     <Text bold color="cyan">20. 可访问性属性</Text>
-    <Box gap={1}>
-      <Text><Text bold>aria-label:</Text> 屏幕阅读器标签</Text>
+    <Text dimColor marginTop={1}>INK 支持 ARIA 属性，方便屏幕阅读器：</Text>
+    
+    <Box marginTop={1} gap={1} flexDirection="column">
+      <Text><Text bold>aria-label:</Text> 元素的文字描述</Text>
       <Text><Text bold>aria-hidden:</Text> 从辅助技术隐藏</Text>
-      <Text><Text bold>aria-role:</Text> 角色定义</Text>
-      <Text><Text bold>aria-state:</Text> 状态信息</Text>
+      <Text><Text bold>aria-role:</Text>元素的角色（如 button）</Text>
+      <Text><Text bold>aria-state:</Text> 元素状态（如选中）</Text>
     </Box>
+    
+    <CodeBlock code={`<Box 
+  aria-label="关闭按钮"
+  aria-role="button"
+  aria-state="pressed"
+>
+  <Text>×</Text>
+</Box>`} />
   </Box>
 );
 
 // ============================================================
-// 主应用 - 整合所有演示
+// 主应用
 // ============================================================
 const InkFullDemo: FC = () => {
   const [activeSection, setActiveSection] = useState(1);
   const { columns, rows } = useWindowSize();
   
-  // 方向键切换章节
   useInput((input, keyInfo) => {
     if (keyInfo.upArrow) setActiveSection(s => Math.max(1, s - 1));
     if (keyInfo.downArrow) setActiveSection(s => Math.min(20, s + 1));
     if (keyInfo.ctrl && input === 'c') process.exit(0);
   });
   
-  const demos: InkElement[] = [
+  const demos = [
     <TextStylesDemo key="1" />,
     <TextWrapDemo key="2" />,
     <BoxLayoutDemo key="3" />,
@@ -613,34 +786,30 @@ const InkFullDemo: FC = () => {
   
   return (
     <Box flexDirection="column" padding={1}>
-      {/* 标题 */}
       <Box justifyContent="center">
-        <Text bold color="cyan" fontSize="large">✨ Ink 完整 API 演示 (TS)</Text>
+        <Text bold color="cyan" fontSize="large">✨ Ink 完整 API 演示</Text>
       </Box>
       <Box justifyContent="center" gap={2}>
         <Text dim>终端: {columns}x{rows}</Text>
         <Text dim>|</Text>
-        <Text dim>↑↓ 切换章节</Text>
+        <Text dim>↑↓ 切换</Text>
         <Text dim>|</Text>
         <Text dim>Ctrl+C 退出</Text>
       </Box>
       <Text dimColor>{'─'.repeat(Math.min(columns, 80))}</Text>
       
-      {/* 当前章节 */}
       <Box marginY={1}>
-        <Text color="yellow">章节 {activeSection}/20:</Text>
+        <Text color="yellow">章节 {activeSection}/20</Text>
       </Box>
       
-      {/* 内容区域 */}
       <Box flexDirection="column" flexGrow={1}>
         {demos[activeSection - 1]}
       </Box>
       
       <Text dimColor>{'─'.repeat(Math.min(columns, 80))}</Text>
-      <Text dimColor> Ink v7 | React for CLIs | TypeScript</Text>
+      <Text dim>ink v7 | React for CLIs</Text>
     </Box>
   );
 };
 
-// 渲染应用
 render(<InkFullDemo />);
