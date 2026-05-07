@@ -33,15 +33,9 @@ import {
 const CodeBlock: FC<{ code: string }> = ({ code }) => (
   <Box flexDirection="column" marginTop={1}>
     <Text dimColor>代码:</Text>
-    <Box 
-      backgroundColor="black" 
-      padding={1} 
-      marginTop={1}
-      borderStyle="round"
-      borderColor="gray"
-    >
-      {code.split('\n').map((line, i) => (
-        <Text key={i} dimColor>{line}{i < code.split('\n').length - 1 ? '\n' : ''}</Text>
+    <Box backgroundColor="black" padding={1} marginTop={1} borderStyle="round" borderColor="gray">
+      {code.split('\n').slice(0, 5).map((line, i) => (
+        <Text key={i} dimColor>{line}</Text>
       ))}
     </Box>
   </Box>
@@ -168,20 +162,19 @@ const FlexLayoutDemo: FC = () => (
     <Text bold color="cyan">4. Flexbox 布局</Text>
     <Text dimColor marginTop={1}>justifyContent 和 alignItems 控制主轴和交叉轴对齐：</Text>
     
-    <Box marginTop={1} gap={2}>
-      <Box gap={1}>
-        <Text bold color="yellow">justifyContent (水平对齐):</Text>
-        <Box borderStyle="round" padding={1} gap={1}>
-          <Text dimColor>flex-start | center | flex-end</Text>
-          <Text dimColor>space-between | space-around</Text>
-        </Box>
+    <Box marginTop={1} flexDirection="column" gap={1}>
+      <Text bold color="yellow">justifyContent (水平对齐):</Text>
+      <Box flexDirection="row" justifyContent="space-between" borderStyle="round" padding={1}>
+        <Text>左</Text>
+        <Text>中</Text>
+        <Text>右</Text>
       </Box>
-      <Box gap={1}>
-        <Text bold color="yellow">alignItems (垂直对齐):</Text>
-        <Box borderStyle="round" padding={1} height={5} gap={1} alignItems="center">
-          <Text>center</Text>
-          <Text dimColor>flex-start | flex-end | stretch</Text>
-        </Box>
+    </Box>
+    
+    <Box marginTop={1} flexDirection="column" gap={1}>
+      <Text bold color="yellow">alignItems (垂直对齐):</Text>
+      <Box height={5} borderStyle="round" alignItems="center">
+        <Text>居中</Text>
       </Box>
     </Box>
     
