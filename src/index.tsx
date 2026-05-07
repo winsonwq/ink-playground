@@ -7,8 +7,8 @@ import React, { useState, useEffect, FC } from 'react';
 import { 
   render, Text, Box, Newline, Spacer,
   Transform,
-  useInput, useApp, useStdin, useWindowSize,
-  useFocus, useFocusManager,
+  useInput, useApp, useStdin, useStdout, useStderr, useWindowSize,
+  useFocus, useFocusManager, useIsScreenReaderEnabled,
   useAnimation, usePaste,
 } from 'ink';
 
@@ -658,6 +658,133 @@ const ConfirmDialog = () => {
 };
 
 // ============================================================
+// 21. useStderr
+// ============================================================
+const UseStderr = () => (
+  <Demo 
+    title="21. useStderr - 错误输出"
+    code={[
+      'const { stderr } = useStderr();',
+      'stderr.write("错误信息\\n");'
+    ]}
+  >
+    <Box marginTop={1} flexDirection="column" gap={1}>
+      <Text>stderr 用于输出错误信息</Text>
+      <Text dimColor>与 stdout 分开，可在重定向时区分</Text>
+      <Box marginTop={1} borderStyle="round" padding={1}>
+        <Text color="red">stderr.write('错误信息')</Text>
+      </Box>
+    </Box>
+  </Demo>
+);
+
+// ============================================================
+// 22. Visibility - 显示/隐藏
+// ============================================================
+const VisibilityDemo = () => {
+  const [visible, setVisible] = useState(true);
+  
+  useInput((input) => {
+    if (input === 'v' || input === 'V') setVisible(!visible);
+  });
+  
+  return (
+    <Demo 
+      title="22. Box visibility - 显示/隐藏"
+      code={[
+        '<Box visibility={false}>',
+        '  <Text>被隐藏</Text>',
+        '</Box>'
+      ]}
+    >
+      <Box marginTop={1} flexDirection="column" gap={1}>
+        <Text>按 V 切换显示/隐藏</Text>
+        <Box gap={1} flexDirection="row">
+          <Box borderStyle="round" padding={1}>
+            <Text>总是显示</Text>
+          </Box>
+          <Box borderStyle="round" padding={1} visibility={visible}>
+            <Text color="green">可切换显示</Text>
+          </Box>
+          <Box borderStyle="round" padding={1} visibility={!visible}>
+            <Text color="red">被隐藏了</Text>
+          </Box>
+        </Box>
+      </Box>
+    </Demo>
+  );
+};
+
+// ============================================================
+// 23. Position - 定位
+// ============================================================
+const PositionDemo = () => (
+  <Demo 
+    title="23. Box position - 定位"
+    code={[
+      '<Box position={{ top: 0, left: 5 }}>',
+      '  <Text>绝对定位</Text>',
+      '</Box>'
+    ]}
+  >
+    <Box marginTop={1} flexDirection="column" gap={1}>
+      <Text>position 属性支持 top, left, right, bottom</Text>
+      <Box width={30} height={4} borderStyle="single" position={{ top: 0, left: 5 }}>
+        <Text>← left:5</Text>
+      </Box>
+      <Text dimColor>position 会相对于父容器定位</Text>
+    </Box>
+  </Demo>
+);
+
+// ============================================================
+// 24. FlexBasis
+// ============================================================
+const FlexBasisDemo = () => (
+  <Demo 
+    title="24. Box flexBasis - 弹性基准"
+    code={[
+      '<Box flexBasis={10}>',
+      '  <Text>基准宽度 10</Text>',
+      '</Box>'
+    ]}
+  >
+    <Box marginTop={1} flexDirection="column" gap={1}>
+      <Box flexDirection="row" gap={2}>
+        <Box flexBasis={8} borderStyle="round" justifyContent="center">
+          <Text>8</Text>
+        </Box>
+        <Box flexBasis={12} borderStyle="round" justifyContent="center">
+          <Text>12</Text>
+        </Box>
+        <Box flexBasis={4} borderStyle="round" justifyContent="center">
+          <Text>4</Text>
+        </Box>
+      </Box>
+      <Text dimColor>flexBasis 定义元素的基础尺寸</Text>
+    </Box>
+  </Demo>
+);
+
+// ============================================================
+// 25. useIsScreenReaderEnabled
+// ============================================================
+const UseIsScreenReaderEnabled = () => (
+  <Demo 
+    title="25. useIsScreenReaderEnabled - 无障碍"
+    code={[
+      'const isScreenReaderEnabled = useIsScreenReaderEnabled();',
+      'if (isScreenReaderEnabled) { /* 屏幕阅读器模式 */ }'
+    ]}
+  >
+    <Box marginTop={1} flexDirection="column" gap={1}>
+      <Text>检测终端是否启用屏幕阅读器模式</Text>
+      <Text dimColor>用于支持视障用户的无障碍访问</Text>
+    </Box>
+  </Demo>
+);
+
+// ============================================================
 // 主应用
 // ============================================================
 const App: FC = () => {
@@ -666,7 +793,7 @@ const App: FC = () => {
   
   useInput((input, keyInfo) => {
     if (keyInfo.upArrow) setActiveSection(s => Math.max(1, s - 1));
-    if (keyInfo.downArrow) setActiveSection(s => Math.min(19, s + 1));
+    if (keyInfo.downArrow) setActiveSection(s => Math.min(24, s + 1));
     if (keyInfo.ctrl && input === 'c') process.exit(0);
   });
   
@@ -692,6 +819,11 @@ const App: FC = () => {
     <UseStdout key="18" />,
     <ComplexLayout key="19" />,
     <ConfirmDialog key="20" />,
+    <UseStderr key="21" />,
+    <VisibilityDemo key="22" />,
+    <PositionDemo key="23" />,
+    <FlexBasisDemo key="24" />,
+    <UseIsScreenReaderEnabled key="25" />,
   ];
   
   return (
@@ -709,7 +841,7 @@ const App: FC = () => {
       <Text dimColor>{'─'.repeat(Math.min(columns, 80))}</Text>
       
       <Box marginY={1}>
-        <Text color="yellow">章节 {activeSection}/19</Text>
+        <Text color="yellow">章节 {activeSection}/24</Text>
       </Box>
       
       <Box flexDirection="column" flexGrow={1}>
