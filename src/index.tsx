@@ -550,7 +550,11 @@ const UseStdin = () => {
         <Text>Raw 模式支持: </Text>
         <Text color={isRawModeSupported ? 'green' : 'red'}>{isRawModeSupported ? '是' : '否'}</Text>
       </Box>
-      <Text marginTop={1}>当前: <Text color="cyan">{mode}</Text> | 按 R 切换</Text>
+      <Box marginTop={1} flexDirection="row">
+        <Text>当前: </Text>
+        <Text color="cyan">{mode}</Text>
+        <Text> | 按 R 切换</Text>
+      </Box>
     </Demo>
   );
 };
