@@ -621,7 +621,7 @@ const App: FC = () => {
   
   useInput((input, keyInfo) => {
     if (keyInfo.upArrow) setActiveSection(s => Math.max(1, s - 1));
-    if (keyInfo.downArrow) setActiveSection(s => Math.min(20, s + 1));
+    if (keyInfo.downArrow) setActiveSection(s => Math.min(13, s + 1));
     if (keyInfo.ctrl && input === 'c') process.exit(0);
   });
   
@@ -639,13 +639,14 @@ const App: FC = () => {
     <UseAnimation key="11" />,
     <UseApp key="12" />,
     <UseBoxMetrics key="13" />,
-    <StaticDemo key="14" />,
-    <TransformDemo key="15" />,
-    <UseCursor key="16" />,
-    <UseStdin key="17" />,
-    <UseStdout key="18" />,
-    <ComplexLayout key="19" />,
-    <Accessibility key="20" />,
+    // Sections 14-20 commented out for debugging
+    // <StaticDemo key="14" />,
+    // <TransformDemo key="15" />,
+    // <UseCursor key="16" />,
+    // <UseStdin key="17" />,
+    // <UseStdout key="18" />,
+    // <ComplexLayout key="19" />,
+    // <Accessibility key="20" />,
   ];
   
   return (
@@ -663,7 +664,7 @@ const App: FC = () => {
       <Text dimColor>{'─'.repeat(Math.min(columns, 80))}</Text>
       
       <Box marginY={1}>
-        <Text color="yellow">章节 {activeSection}/20</Text>
+        <Text color="yellow">章节 {activeSection}/13</Text>
       </Box>
       
       <Box flexDirection="column" flexGrow={1}>
