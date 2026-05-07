@@ -30,7 +30,7 @@ const Code: FC<{ lines: string[] }> = ({ lines }) => (
 const Demo: FC<{ title: string; children: React.ReactNode; code?: string[] }> = ({ title, children, code }) => (
   <Box flexDirection="column" marginY={1}>
     <Text bold color="cyan">{title}</Text>
-    {children}
+    <Box flexDirection="column">{children}</Box>
     {code && <Code lines={code} />}
   </Box>
 );
