@@ -591,26 +591,71 @@ const ComplexLayout = () => (
 );
 
 // ============================================================
-// 20. 可访问性
+// 20. 模拟对话框
 // ============================================================
-const Accessibility = () => (
-  <Demo 
-    title="20. 可访问性属性"
-    code={[
-      '<Box aria-label="关闭按钮"',
-      '     aria-role="button">',
-      '  <Text>×</Text>',
-      '</Box>'
-    ]}
-  >
-    <Box marginTop={1} flexDirection="column" gap={1}>
-      <Text>aria-label - 元素描述</Text>
-      <Text>aria-hidden - 隐藏于辅助技术</Text>
-      <Text>aria-role - 元素角色</Text>
-      <Text>aria-state - 元素状态</Text>
-    </Box>
-  </Demo>
-);
+const ConfirmDialog = () => {
+  const [showDialog, setShowDialog] = useState(false);
+  const [result, setResult] = useState<string | null>(null);
+  
+  useInput((input) => {
+    if (input === 'd' && !showDialog) setShowDialog(true);
+    if (input === 'q' && !showDialog) {
+      setShowDialog(true);
+    }
+  });
+  
+  if (showDialog && result === null) {
+    return (
+      <Demo 
+        title="20. 模拟对话框"
+        code={[
+          'const [showDialog, setShowDialog] = useState(false);',
+          '<Box borderStyle=\"double\">',
+          '  <Text>确认退出？</Text>',
+          '</Box>'
+        ]}
+      >
+        <Box marginTop={1} borderStyle="double" padding={2} flexDirection="column" gap={1} alignItems="center">
+          <Text bold>确认对话框</Text>
+          <Newline />
+          <Text>确定要执行此操作吗？</Text>
+          <Newline />
+          <Box flexDirection="row" gap={4}>
+            <Box borderStyle="round" paddingX={2} paddingY={1} onClick={() => { setResult('是'); setShowDialog(false); }}>
+              <Text color="green">是 (Y)</Text>
+            </Box>
+            <Box borderStyle="round" paddingX={2} paddingY={1} onClick={() => { setResult('否'); setShowDialog(false); }}>
+              <Text color="red">否 (N)</Text>
+            </Box>
+          </Box>
+          <Text marginTop={1} dimColor>按 Y 或 N 或点击选择</Text>
+        </Box>
+      </Demo>
+    );
+  }
+  
+  return (
+    <Demo 
+      title="20. 模拟对话框"
+      code={[
+        '// 用 Box + borderStyle 模拟对话框',
+        '<Box borderStyle="double" padding={2}>',
+        '  <Text>内容</Text>',
+        '</Box>'
+      ]}
+    >
+      <Box marginTop={1} flexDirection="column" gap={1}>
+        <Text>按 D 或 Q 打开对话框</Text>
+        <Text dimColor>对话框是 CLI 中常见的模式</Text>
+        {result && (
+          <Box marginTop={1} borderStyle="round" padding={1}>
+            <Text color="green">上次选择: {result}</Text>
+          </Box>
+        )}
+      </Box>
+    </Demo>
+  );
+};
 
 // ============================================================
 // 主应用
@@ -646,7 +691,7 @@ const App: FC = () => {
     <UseStdin key="17" />,
     <UseStdout key="18" />,
     <ComplexLayout key="19" />,
-    <Accessibility key="20" />,
+    <ConfirmDialog key="20" />,
   ];
   
   return (
