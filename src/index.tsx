@@ -313,7 +313,7 @@ const FocusableButton: FC<{ label: string; onPress: () => void }> = ({ label, on
 };
 
 const UseFocus = () => {
-  const [selected, setSelected] = useState<number | null>(null);
+  const [selected, setSelected] = useState(0);
   const { focusNext, focusPrevious } = useFocusManager();
   
   useInput((_, keyInfo) => {
@@ -332,15 +332,13 @@ const UseFocus = () => {
         '// Tab 切换焦点'
       ]}
     >
-      <Text marginTop={1} dimColor>Tab 切换焦点，Enter/空格 确认</Text>
+      <Text marginTop={1} dimColor>Tab 切换焦点，Enter/空格 确认（默认选中第一项）</Text>
       <Box marginTop={1} gap={1} flexDirection="row">
         {options.map((label, i) => (
           <FocusableButton key={i} label={label} onPress={() => setSelected(i)} />
         ))}
       </Box>
-      {selected !== null && (
-        <Text marginTop={1} color="green">✓ 已选择: {options[selected]}</Text>
-      )}
+      <Text marginTop={1} color="green">✓ 已选择: {options[selected]}</Text>
     </Demo>
   );
 };
