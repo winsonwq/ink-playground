@@ -683,9 +683,13 @@ const UseStderr = () => (
 // ============================================================
 const VisibilityDemo = () => {
   const [visible, setVisible] = useState(true);
+  const [toggleCount, setToggleCount] = useState(0);
   
-  useInput((input) => {
-    if (input === 'v' || input === 'V') setVisible(!visible);
+  useInput((input, keyInfo) => {
+    if (input === 'v' || input === 'V') {
+      setVisible(v => !v);
+      setToggleCount(c => c + 1);
+    }
   });
   
   return (
@@ -698,16 +702,16 @@ const VisibilityDemo = () => {
       ]}
     >
       <Box marginTop={1} flexDirection="column" gap={1}>
-        <Text>按 V 切换显示/隐藏</Text>
+        <Text>按 V 切换显示/隐藏 (切换次数: {toggleCount})</Text>
         <Box gap={1} flexDirection="row">
           <Box borderStyle="round" padding={1}>
             <Text>总是显示</Text>
           </Box>
           <Box borderStyle="round" padding={1} visibility={visible}>
-            <Text color="green">可切换显示</Text>
+            <Text color="green">可见状态: {visible ? '显示' : '隐藏'}</Text>
           </Box>
           <Box borderStyle="round" padding={1} visibility={!visible}>
-            <Text color="red">被隐藏了</Text>
+            <Text color="red">备用文本</Text>
           </Box>
         </Box>
       </Box>
