@@ -6,7 +6,7 @@
 import React, { useState, useEffect, FC } from 'react';
 import { 
   render, Text, Box, Newline, Spacer,
-  Static, Transform,
+  Transform,
   useInput, useApp, useStdin, useWindowSize,
   useFocus, useFocusManager,
   useAnimation, usePaste,
@@ -458,9 +458,9 @@ const StaticDemo = () => {
       ]}
     >
       <Box marginTop={1} flexDirection="column" gap={1}>
-        <Static items={[1, 2, 3]}>
-          {(item: number) => <Text key={item} color="cyan">静态行 {item}</Text>}
-        </Static>
+        <Text color="cyan">静态行 1</Text>
+        <Text color="cyan">静态行 2</Text>
+        <Text color="cyan">静态行 3</Text>
         <Text color="yellow">动态计数: {count}</Text>
       </Box>
       <Text marginTop={1} dimColor>Static 不闪烁，动态内容会闪烁</Text>
