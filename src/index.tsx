@@ -12,13 +12,16 @@ import {
   useAnimation, usePaste,
 } from 'ink';
 
-// 代码示例组件 - 简洁版本
+// 代码示例组件 - 带行号和语法高亮模拟
 const Code: FC<{ lines: string[] }> = ({ lines }) => (
   <Box flexDirection="column" marginTop={1}>
     <Text dimColor>代码示例:</Text>
-    <Box backgroundColor="black" padding={1}>
+    <Box backgroundColor="black" padding={1} flexDirection="column">
       {lines.map((line, i) => (
-        <Text key={i} dimColor>{line}</Text>
+        <Box key={i} flexDirection="row">
+          <Text dimColor>{String(i + 1).padStart(2, ' ')} │ </Text>
+          <Text color="cyan">{line}</Text>
+        </Box>
       ))}
     </Box>
   </Box>
