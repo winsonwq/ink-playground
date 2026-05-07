@@ -666,7 +666,7 @@ const App: FC = () => {
   
   useInput((input, keyInfo) => {
     if (keyInfo.upArrow) setActiveSection(s => Math.max(1, s - 1));
-    if (keyInfo.downArrow) setActiveSection(s => Math.min(20, s + 1));
+    if (keyInfo.downArrow) setActiveSection(s => Math.min(19, s + 1));
     if (keyInfo.ctrl && input === 'c') process.exit(0);
   });
   
@@ -709,7 +709,7 @@ const App: FC = () => {
       <Text dimColor>{'─'.repeat(Math.min(columns, 80))}</Text>
       
       <Box marginY={1}>
-        <Text color="yellow">章节 {activeSection}/20</Text>
+        <Text color="yellow">章节 {activeSection}/19</Text>
       </Box>
       
       <Box flexDirection="column" flexGrow={1}>
