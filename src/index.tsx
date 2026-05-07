@@ -12,25 +12,20 @@ import {
   useAnimation, usePaste,
 } from 'ink';
 
-// 代码示例组件 - 带行号和语法高亮模拟
+// 代码示例组件
 const Code: FC<{ lines: string[] }> = ({ lines }) => (
-  <Box flexDirection="column" marginTop={1}>
+  <Box flexDirection="column" marginTop={1} padding={1} borderStyle="round">
     <Text dimColor>代码示例:</Text>
-    <Box backgroundColor="black" padding={1} flexDirection="column">
-      {lines.map((line, i) => (
-        <Box key={i} flexDirection="row">
-          <Text dimColor>{String(i + 1).padStart(2, ' ')} │ </Text>
-          <Text color="cyan">{line}</Text>
-        </Box>
-      ))}
-    </Box>
+    {lines.map((line, i) => (
+      <Text key={i} dimColor>{String(i + 1).padStart(2, ' ')} │ {line}</Text>
+    ))}
   </Box>
 );
 
-const Demo: FC<{ title: string; children: React.ReactNode; code?: string[] }> = ({ title, children, code }) => (
+const Demo: FC<{ title: string; children: any; code?: string[] }> = ({ title, children, code }) => (
   <Box flexDirection="column" marginY={1}>
     <Text bold color="cyan">{title}</Text>
-    <Box flexDirection="column">{children}</Box>
+    {children}
     {code && <Code lines={code} />}
   </Box>
 );
