@@ -790,6 +790,124 @@ const UseIsScreenReaderEnabled = () => (
 );
 
 // ============================================================
+// 26. 文本对齐
+// ============================================================
+const TextAlignDemo = () => (
+  <Demo 
+    title="26. Text textAlign - 文本对齐"
+    code={[
+      '<Text textAlign=\"left\">左对齐</Text>',
+      '<Text textAlign=\"center\">居中</Text>',
+      '<Text textAlign=\"right\">右对齐</Text>'
+    ]}
+  >
+    <Box marginTop={1} flexDirection="column" gap={1}>
+      <Box width={30} borderStyle="round">
+        <Text textAlign="left">← 左对齐 left</Text>
+      </Box>
+      <Box width={30} borderStyle="round">
+        <Text textAlign="center">居中 center</Text>
+      </Box>
+      <Box width={30} borderStyle="round">
+        <Text textAlign="right">右对齐 right →</Text>
+      </Box>
+    </Box>
+  </Demo>
+);
+
+// ============================================================
+// 27. 百分比尺寸
+// ============================================================
+const PercentSizeDemo = () => (
+  <Demo 
+    title="27. Box 百分比尺寸"
+    code={[
+      '<Box width=\"50%\">半宽</Box>',
+      '<Box height=\"50%\">半高</Box>'
+    ]}
+  >
+    <Box marginTop={1} flexDirection="column" gap={1}>
+      <Box width={20} height={4} borderStyle="single" flexDirection="column">
+        <Box width="50%" height="50%" borderStyle="double">
+          <Text>50%x50%</Text>
+        </Box>
+      </Box>
+      <Text dimColor>父容器 20x4，内部 Box 占 50%x50%</Text>
+    </Box>
+  </Demo>
+);
+
+// ============================================================
+// 28. zIndex 层叠
+// ============================================================
+const ZIndexDemo = () => (
+  <Demo 
+    title="28. Box zIndex - 层叠顺序"
+    code={[
+      '<Box zIndex={2}>在顶层</Box>',
+      '<Box zIndex={1}>在底层</Box>'
+    ]}
+  >
+    <Box marginTop={1} flexDirection="column" gap={1}>
+      <Box width={20} height={3} borderStyle="round" position={{ top: 0, left: 0 }}>
+        <Text zIndex={1} color="blue">zIndex=1 底层</Text>
+      </Box>
+      <Box width={18} height={2} borderStyle="bold" position={{ top: 1, left: 1 }}>
+        <Text zIndex={2} color="yellow">zIndex=2 顶层</Text>
+      </Box>
+      <Text dimColor>zIndex 大的在上层</Text>
+    </Box>
+  </Demo>
+);
+
+// ============================================================
+// 29. 完整边框样式
+// ============================================================
+const AllBordersDemo = () => (
+  <Demo 
+    title="29. 所有边框样式"
+    code={[
+      '<Box borderStyle=\"single\" />',
+      '<Box borderStyle=\"double\" />',
+      '<Box borderStyle=\"round\" />',
+      '<Box borderStyle=\"bold\" />'
+    ]}
+  >
+    <Box marginTop={1} flexDirection="column" gap={1}>
+      <Box flexDirection="row" gap={2} flexWrap="wrap">
+        <Box width={12} height={3} borderStyle="single" justifyContent="center" alignItems="center">
+          <Text>single</Text>
+        </Box>
+        <Box width={12} height={3} borderStyle="double" justifyContent="center" alignItems="center">
+          <Text>double</Text>
+        </Box>
+        <Box width={12} height={3} borderStyle="round" justifyContent="center" alignItems="center">
+          <Text>round</Text>
+        </Box>
+        <Box width={12} height={3} borderStyle="bold" justifyContent="center" alignItems="center">
+          <Text>bold</Text>
+        </Box>
+      </Box>
+      <Box flexDirection="row" gap={2} flexWrap="wrap">
+        <Box width={12} height={3} borderStyle="singleDouble" justifyContent="center" alignItems="center">
+          <Text>singleD</Text>
+        </Box>
+        <Box width={12} height={3} borderStyle="doubleSingle" justifyContent="center" alignItems="center">
+          <Text>doubleS</Text>
+        </Box>
+        <Box width={12} height={3} borderStyle="classic" justifyContent="center" alignItems="center">
+          <Text>classic</Text>
+        </Box>
+        <Box width={12} height={3} borderStyle="dots" justifyContent="center" alignItems="center">
+          <Text>dots</Text>
+        </Box>
+      </Box>
+      <Text marginTop={1} dimColor>ink v7 支持的边框样式</Text>
+    </Box>
+  </Demo>
+);
+
+// ============================================================
 // 主应用
 // ============================================================
 const App: FC = () => {
@@ -798,7 +916,7 @@ const App: FC = () => {
   
   useInput((input, keyInfo) => {
     if (keyInfo.upArrow) setActiveSection(s => Math.max(1, s - 1));
-    if (keyInfo.downArrow) setActiveSection(s => Math.min(24, s + 1));
+    if (keyInfo.downArrow) setActiveSection(s => Math.min(28, s + 1));
     if (keyInfo.ctrl && input === 'c') process.exit(0);
   });
   
@@ -829,6 +947,10 @@ const App: FC = () => {
     <PositionDemo key="23" />,
     <FlexBasisDemo key="24" />,
     <UseIsScreenReaderEnabled key="25" />,
+    <TextAlignDemo key="26" />,
+    <PercentSizeDemo key="27" />,
+    <ZIndexDemo key="28" />,
+    <AllBordersDemo key="29" />,
   ];
   
   return (
@@ -846,7 +968,7 @@ const App: FC = () => {
       <Text dimColor>{'─'.repeat(Math.min(columns, 80))}</Text>
       
       <Box marginY={1}>
-        <Text color="yellow">章节 {activeSection}/24</Text>
+        <Text color="yellow">章节 {activeSection}/28</Text>
       </Box>
       
       <Box flexDirection="column" flexGrow={1}>
