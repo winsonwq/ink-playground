@@ -384,14 +384,19 @@ const UseAnimation = () => {
 // ============================================================
 const UseApp = () => {
   const { exit, waitUntilRenderFlush } = useApp();
-  const [status, setStatus] = useState('idle');
+  const [step, setStep] = useState(0);
   
   const handleExit = async () => {
-    setStatus('flushing...');
-    await waitUntilRenderFlush();
-    setStatus('exiting...');
-    setTimeout(() => exit({ message: 'Bye!' }), 300);
+    if (step === 0) {
+      setStep(1); // 等待渲染 flush
+      await waitUntilRenderFlush();
+      setStep(2);
+      setTimeout(() => exit({ message: 'Bye!' }), 500);
+    }
   };
+  
+  const statusText = step === 0 ? 'idle' : step === 1 ? 'flushing...' : 'exiting...';
+  const statusColor = step === 0 ? 'yellow' : step === 1 ? 'cyan' : 'red';
   
   return (
     <Demo 
@@ -402,10 +407,17 @@ const UseApp = () => {
         'exit({ message: "done" });'
       ]}
     >
-      <Box marginTop={1} gap={1}>
-        <Text>状态: <Text color="green">{status}</Text></Text>
-        <Box borderStyle="round" padding={1} onClick={handleExit}>
-          <Text color="yellow">点击此处演示 exit()</Text>
+      <Box marginTop={1} flexDirection="column" gap={1}>
+        <Box flexDirection="row" gap={2}>
+          <Text>waitUntilRenderFlush:</Text>
+          <Text color={step >= 1 ? 'green' : 'gray'}>{step >= 1 ? '✓ 完成' : '○ 等待'}</Text>
+        </Box>
+        <Box flexDirection="row" gap={2}>
+          <Text>exit():</Text>
+          <Text color={step >= 2 ? 'green' : 'gray'}>{step >= 2 ? '✓ 调用' : '○ 等待'}</Text>
+        </Box>
+        <Box marginTop={1} borderStyle="round" padding={1} onClick={handleExit}>
+          <Text color={statusColor}>点击演示退出流程 (step: {step})</Text>
         </Box>
       </Box>
     </Demo>
