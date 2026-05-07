@@ -120,12 +120,6 @@ const BorderStyles = () => (
         <Box width={10} borderStyle="round" justifyContent="center"><Text>round</Text></Box>
         <Box width={10} borderStyle="bold" justifyContent="center"><Text>bold</Text></Box>
       </Box>
-      <Box flexDirection="row" gap={2}>
-        <Box width={10} borderStyle="singleDouble" justifyContent="center"><Text>s-d</Text></Box>
-        <Box width={10} borderStyle="doubleSingle" justifyContent="center"><Text>d-s</Text></Box>
-        <Box width={10} borderStyle="classic" justifyContent="center"><Text>classic</Text></Box>
-        <Box width={10} borderStyle="dots" justifyContent="center"><Text>dots</Text></Box>
-      </Box>
     </Box>
   </Demo>
 );
