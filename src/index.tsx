@@ -142,8 +142,8 @@ const FlexLayout = () => (
         <Text>中</Text>
         <Text>右</Text>
       </Box>
-      <Box height={3} alignItems="center" borderStyle="round" padding={1}>
-        <Text>垂直居中 (alignItems="center")</Text>
+      <Box height={3} alignItems="flex-end" borderStyle="round" padding={1}>
+        <Text>底部对齐 (alignItems="flex-end")</Text>
       </Box>
     </Box>
   </Demo>
