@@ -1,0 +1,23 @@
+{
+  "name": "ink-demo",
+  "version": "1.0.0",
+  "description": "Ink TUI Demo - TypeScript version",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx src/index.tsx",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": ["ink", "tui", "cli", "react"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^25.6.0",
+    "@types/react": "^19.2.14",
+    "ink": "^7.0.2",
+    "react": "^19.2.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}
