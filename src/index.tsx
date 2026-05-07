@@ -621,7 +621,7 @@ const App: FC = () => {
   
   useInput((input, keyInfo) => {
     if (keyInfo.upArrow) setActiveSection(s => Math.max(1, s - 1));
-    if (keyInfo.downArrow) setActiveSection(s => Math.min(14, s + 1));
+    if (keyInfo.downArrow) setActiveSection(s => Math.min(15, s + 1));
     if (keyInfo.ctrl && input === 'c') process.exit(0);
   });
   
@@ -640,7 +640,7 @@ const App: FC = () => {
     <UseApp key="12" />,
     <UseBoxMetrics key="13" />,
     <StaticDemo key="14" />,
-    // <TransformDemo key="15" />,
+    <TransformDemo key="15" />,
     // <UseCursor key="16" />,
     // <UseStdin key="17" />,
     // <UseStdout key="18" />,
@@ -663,7 +663,7 @@ const App: FC = () => {
       <Text dimColor>{'─'.repeat(Math.min(columns, 80))}</Text>
       
       <Box marginY={1}>
-        <Text color="yellow">章节 {activeSection}/14</Text>
+        <Text color="yellow">章节 {activeSection}/15</Text>
       </Box>
       
       <Box flexDirection="column" flexGrow={1}>
