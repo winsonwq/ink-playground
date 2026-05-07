@@ -7,10 +7,6 @@ Ink TUI 框架完整演示，覆盖所有核心 API。
 ## 运行
 
 ```bash
-# JavaScript 版本
-node index.mjs
-
-# TypeScript 版本
 npx tsx src/index.tsx
 ```
 
@@ -51,8 +47,7 @@ npx tsx src/index.tsx
 ```
 ink-playground/
 ├── src/
-│   └── index.tsx      # TypeScript 版本（推荐）
-├── index.mjs          # JavaScript 版本
+│   └── index.tsx      # TypeScript 版本
 ├── package.json
 └── tsconfig.json
 ```
